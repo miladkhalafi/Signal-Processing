@@ -8,41 +8,48 @@
 ### ✅ فرمول:
 
 #### ▪ اگر تمام جامعه باشد (Population Variance):
-$$
-\sigma^2 = \frac{1}{N} \sum_{n=1}^{N}(x[n] - \bar{x})^2
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Csigma%5E2%20%3D%20%5Cfrac%7B1%7D%7BN%7D%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%28x%5Bn%5D%20-%20%5Cbar%7Bx%7D%29%5E2>)
+
 
 #### ▪ اگر یک نمونه باشد (Sample Variance):
-$$
-s^2 = \frac{1}{N-1} \sum_{n=1}^{N}(x[n] - \bar{x})^2
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?s%5E2%20%3D%20%5Cfrac%7B1%7D%7BN-1%7D%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%28x%5Bn%5D%20-%20%5Cbar%7Bx%7D%29%5E2>)
+
 
 ### 💡 مثال:
 
 داده‌ها:
-$$
-x = [7, 6, 5], \quad \bar{x} = 6
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?x%20%3D%20%5B7%2C%206%2C%205%5D%2C%20%5Cquad%20%5Cbar%7Bx%7D%20%3D%206>)
+
 
 تفاوت‌ها:
-$$
-(7 - 6)^2 = 1, \quad (6 - 6)^2 = 0, \quad (5 - 6)^2 = 1
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%287%20-%206%29%5E2%20%3D%201%2C%20%5Cquad%20%286%20-%206%29%5E2%20%3D%200%2C%20%5Cquad%20%285%20-%206%29%5E2%20%3D%201>)
+
 
 جمع مجذورات:
-$$
-1 + 0 + 1 = 2
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?1%20%2B%200%20%2B%201%20%3D%202>)
+
 
 #### الف) اگر Population باشد:
-$$
-\sigma^2 = \frac{2}{3} \approx 0.6667
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Csigma%5E2%20%3D%20%5Cfrac%7B2%7D%7B3%7D%20%5Capprox%200.6667>)
+
 
 #### ب) اگر Sample باشد:
-$$
-s^2 = \frac{2}{2} = 1
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?s%5E2%20%3D%20%5Cfrac%7B2%7D%7B2%7D%20%3D%201>)
+
 
 ✅ بنابراین:
 - واریانس جامعه: **0.6667**
