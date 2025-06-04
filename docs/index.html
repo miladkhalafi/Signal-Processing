@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>تمرین تعاملی SNR</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      max-width: 700px;
+      margin: auto;
+    }
+    h2 {
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #0077cc;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>تمرین تعاملی SNR</h2>
+  <p>با کلیک روی دکمه، اعداد جدیدی برای سیگنال و نویز تولید می‌شوند و می‌توانید مراحل محاسبه SNR را ببینید.</p>
+
+  <button onclick="generateSNRProblem()">تولید سؤال جدید</button>
+
+  <h3>سؤال ۱: محاسبه SNR سیگنال نویزی</h3>
+  <div id="q1"></div>
+
+  <h3>سؤال ۲: محاسبه SNR پس از فیلتر میانگین‌گیر متحرک</h3>
+  <div id="q2"></div>
+</div>
+
+<script>
+function getRandomSignal(length, noiseLevel = 0.5) {
+  const signal = [];
+  const noisy = [];
+  for (let i = 0; i < length; i++) {
+    let base = Math.floor(Math.random() * 6) + 3;
+    let noise = (Math.random() * 2 - 1) * noiseLevel;
+    signal.push(base);
+    noisy.push(parseFloat((base + noise).toFixed(2)));
+  }
+  return {signal, noisy};
+}
+
+function energy(arr) {
+  return arr.reduce((acc, val) => acc + val * val, 0);
+}
+
+function difference(a, b) {
+  return a.map((val, i) => parseFloat((val - b[i]).toFixed(2)));
+}
+
+function movingAverage(arr, window = 3) {
+  const out = [];
+  for (let i = 0; i <= arr.length - window; i++) {
+    let sum = 0;
+    for (let j = 0; j < window; j++) sum += arr[i + j];
+    out.push(parseFloat((sum / window).toFixed(2)));
+  }
+  return out;
+}
+
+function generateSNRProblem() {
+  const {signal, noisy} = getRandomSignal(6);
+  const noise = difference(noisy, signal);
+  const Es = energy(signal);
+  const En = energy(noise);
+  const snr = (10 * Math.log10(Es / En)).toFixed(2);
+
+  document.getElementById("q1").innerHTML = `
+    <pre>
+سیگنال اصلی:    [${signal.join(", ")}]
+سیگنال نویزی:   [${noisy.join(", ")}]
+نویز:            [${noise.join(", ")}]
+
+انرژی سیگنال = ${Es.toFixed(2)}
+انرژی نویز = ${En.toFixed(2)}
+
+SNR = 10 log₁₀(${Es.toFixed(2)} / ${En.toFixed(2)}) = <b>${snr} dB</b>
+    </pre>`;
+
+  const noisy_filtered = movingAverage(noisy);
+  const signal_crop = signal.slice(0, noisy_filtered.length);
+  const filtered_noise = difference(noisy_filtered, signal_crop);
+  const Enf = energy(filtered_noise);
+  const Esf = energy(signal_crop);
+  const snrf = (10 * Math.log10(Esf / Enf)).toFixed(2);
+
+  document.getElementById("q2").innerHTML = `
+    <pre>
+سیگنال میانگین‌گیری‌شده: [${noisy_filtered.join(", ")}]
+سیگنال اصلی (برش‌خورده): [${signal_crop.join(", ")}]
+نویز باقی‌مانده:         [${filtered_noise.join(", ")}]
+
+انرژی جدید سیگنال = ${Esf.toFixed(2)}
+انرژی نویز بعد فیلتر = ${Enf.toFixed(2)}
+
+SNR جدید = 10 log₁₀(${Esf.toFixed(2)} / ${Enf.toFixed(2)}) = <b>${snrf} dB</b>
+    </pre>`;
+}
+</script>
+</body>
+</html>
