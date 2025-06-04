@@ -3,149 +3,127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>محاسبه SNR</title>
+  <title>پردازش سیگنال - فصل ۳</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script> 
   <!-- Vazir Font -->
   <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css"  rel="stylesheet" type="text/css" />
-  <!-- تنظیم فونت پیش‌فرض -->
   <style>
     body {
       font-family: 'Vazir', Tahoma, sans-serif;
     }
+    a {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+    a:hover {
+      color: #1d4ed8;
+    }
   </style>
 </head>
 <body class="bg-gray-100 text-right text-gray-800 leading-relaxed p-5 md:p-10">
-  <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
-    <h1 class="text-2xl md:text-3xl text-gray-900 mb-5 pb-3 border-b border-gray-200">سوال: محاسبه SNR برای سیگنال‌های نویزدار</h1>
-
-    <p class="mb-4">جدول زیر شامل چهار سیگنال نویزدار و یک سیگنال اصلی است. هدف محاسبه SNR برای سیگنال اصلی با استفاده از:</p>
-    <ul class="pr-5 mb-6 list-disc space-y-2 text-gray-700">
-      <li>Median Filter</li>
-      <li>Ensemble Averaging</li>
-    </ul>
-
-    <table id="dataTable" class="w-full table-auto border-collapse shadow-md rounded-lg overflow-hidden mb-6">
-      <!-- توسط جاوااسکریپت پر می‌شود -->
-    </table>
-
-    <button onclick="generateNewData()" class="w-full md:w-auto px-6 py-3 text-lg font-medium bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white rounded-lg transition transform hover:-translate-y-1 shadow-md focus:outline-none mb-6">
-      تغییر عددها
-    </button>
-
-    <div class="mt-10 p-6 bg-gray-100 border-l-4 border-green-500 rounded-lg">
-      <h2 class="text-xl text-blue-600 mb-4">محاسبات:</h2>
-      <pre id="calculationOutput" class="bg-gray-50 p-4 rounded-lg overflow-x-auto border border-gray-300 font-mono text-sm whitespace-pre-wrap shadow-inner"></pre>
-    </div>
+  <!-- عنوان اصلی -->
+  <div class="max-w-5xl mx-auto mb-8 text-center">
+    <h1 class="text-3xl md:text-4xl font-bold text-blue-700">پردازش سیگنال</h1>
+    <p class="mt-2 text-lg text-gray-600">لینک های فایل‌های موجود در پروژه  </p>
   </div>
 
-  <script>
-    // کد جاوااسکریپت بدون تغییر
-    let originalSignal = [3, 9, 5, 7, 6];
-    let noisySignals = [
-      [3.2, 8.1, 4.7, 7.4, 6.1],
-      [2.9, 9.1, 5.1, 6.4, 5.8],
-      [3.1, 8.7, 5.3, 7.1, 6.2],
-      [2.7, 8.8, 4.9, 7.2, 5.8]
-    ];
+  <!-- جدول اطلاعات -->
+  <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+    <h2 class="text-xl md:text-2xl text-gray-900 mb-6 pb-2 border-b border-gray-200">فصل ۳ </h2>
 
-    function generateNewData() {
-      originalSignal = Array.from({ length: 5 }, () => Math.floor(Math.random() * 10) + 1);
-      noisySignals = Array.from({ length: 4 }, () =>
-        originalSignal.map(val => parseFloat((val + (Math.random() - 0.5) * 2).toFixed(2)))
-      );
-      updateTable();
-      calculateSNR();
-    }
+    <p class="mb-6">جدول زیر ارتباط منطقی فصل ۳ با فایل‌های موجود در پروژه <a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3"  target="_blank" class="text-blue-600 hover:text-blue-800 underline">GitHub</a> را نشان می‌دهد:</p>
 
-    function updateTable() {
-      const table = document.getElementById("dataTable");
-      table.innerHTML = "";
-
-      const headerRow = table.insertRow();
-      headerRow.insertCell().textContent = "نام سیگنال";
-      for (let i = 0; i < 5; i++) headerRow.insertCell().textContent = `نمونه ${i+1}`;
-      headerRow.classList.add("bg-blue-500", "text-white");
-
-      const originalRow = table.insertRow();
-      originalRow.insertCell().textContent = "سیگنال اصلی";
-      originalSignal.forEach(val => originalRow.insertCell().textContent = val);
-
-      for (let i = 0; i < 4; i++) {
-        const row = table.insertRow();
-        row.insertCell().textContent = `سیگنال نویزدار ${i+1}`;
-        noisySignals[i].forEach(val => row.insertCell().textContent = parseFloat(val).toFixed(2));
-      }
-
-      // Apply Tailwind styles to table elements
-      [...table.rows].forEach(row => {
-        [...row.cells].forEach(cell => {
-          cell.className = "border border-gray-300 px-4 py-2 text-center transition-all";
-        });
-      });
-
-      [...table.querySelectorAll("th")].forEach(th => {
-        th.className = "bg-blue-500 text-white font-bold px-4 py-2 text-center";
-      });
-    }
-
-    function median(arr) {
-      const sorted = [...arr].map(Number).sort((a, b) => a - b);
-      const mid = Math.floor(sorted.length / 2);
-      return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-    }
-
-    function average(arr) {
-      return arr.reduce((sum, val) => sum + parseFloat(val), 0) / arr.length;
-    }
-
-    function calculateEnergy(signal) {
-      return signal.reduce((sum, val) => sum + val * val, 0);
-    }
-
-    function calculateSNRValue(signalEnergy, noiseEnergy) {
-      return 10 * Math.log10(signalEnergy / noiseEnergy);
-    }
-
-    function calculateSNRForMethod(filterFunction) {
-      const filteredSignal = [];
-      for (let i = 0; i < 5; i++) {
-        const columnValues = noisySignals.map(signal => parseFloat(signal[i]));
-        filteredSignal.push(filterFunction(columnValues));
-      }
-
-      const noise = originalSignal.map((val, i) => val - filteredSignal[i]);
-      const noiseEnergy = calculateEnergy(noise);
-      const signalEnergy = calculateEnergy(originalSignal);
-      const snr = parseFloat(calculateSNRValue(signalEnergy, noiseEnergy).toFixed(2));
-
-      return { snr, filteredSignal, noise, noiseEnergy, signalEnergy };
-    }
-
-    function calculateSNR() {
-      const medianResult = calculateSNRForMethod(median);
-      const avgResult = calculateSNRForMethod(average);
-
-      const output = `سیگنال اصلی: [${originalSignal}]
-انرژی سیگنال اصلی: ${medianResult.signalEnergy.toFixed(2)}
-
-Median Filter:
-سیگنال فیلتر شده: [${medianResult.filteredSignal.map(v => v.toFixed(2))}]
-نویز: [${medianResult.noise.map(v => v.toFixed(2))}]
-انرژی نویز: ${medianResult.noiseEnergy.toFixed(2)}
-SNR = 10 * log10(${medianResult.signalEnergy.toFixed(2)} / ${medianResult.noiseEnergy.toFixed(2)}) ≈ ${medianResult.snr.toFixed(2)} dB
-
-Ensemble Averaging:
-سیگنال فیلتر شده: [${avgResult.filteredSignal.map(v => v.toFixed(2))}]
-نویز: [${avgResult.noise.map(v => v.toFixed(2))}]
-انرژی نویز: ${avgResult.noiseEnergy.toFixed(2)}
-SNR = 10 * log10(${avgResult.signalEnergy.toFixed(2)} / ${avgResult.noiseEnergy.toFixed(2)}) ≈ ${avgResult.snr.toFixed(2)} dB`;
-
-      document.getElementById("calculationOutput").textContent = output;
-    }
-
-    updateTable();
-    calculateSNR();
-  </script>
+    <table class="w-full table-auto border-collapse shadow-md rounded-lg overflow-hidden mb-6">
+      <thead>
+        <tr class="bg-blue-500 text-white">
+          <th class="border border-gray-300 px-4 py-3 text-center">نام فایل</th>
+          <th class="border border-gray-300 px-4 py-3 text-center">نوع فایل</th>
+          <th class="border border-gray-300 px-4 py-3 text-center">موضوع اصلی</th>
+          <th class="border border-gray-300 px-4 py-3 text-center">پوشش دهنده قسمتی از فصل ۳</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/question_1.md"  target="_blank">question_1.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">سوال</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">آمار توصیفی و SNR</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">مفهوم اصلی SNR و نحوه محاسبه انرژی سیگنال و نویز</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/question_2.md"  target="_blank">question_2.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">سوال</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">مقایسه روش‌های حذف نویز</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">روش Median Filter و Ensemble Averaging</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_01-02.md"  target="_blank">slide_01-02.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">معرفی فصل و اهداف</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اهداف فصل ۳ و مقدمه‌ای بر پردازش سیگنال</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_03.md"  target="_blank">slide_03.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">مفاهیم پایه‌ای SNR</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">فرمول SNR و نحوه محاسبه</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_06.md"  target="_blank">slide_06.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">نویز در سیگنال‌ها</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">تعریف نویز و انواع آن در سیگنال‌های الکتریکی</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_07.md"  target="_blank">slide_07.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">روش‌های حذف نویز</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">مروری بر روشهای مختلف حذف نویز</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_08.md"  target="_blank">slide_08.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">مقایسه فیلترها</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">مقایسه عملکرد فیلترهای مختلف</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_09-10.md"  target="_blank">slide_09-10.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">آمار توصیفی</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">میانگین، واریانس، انحراف معیار و کواریانس</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_15-17.md"  target="_blank">slide_15-17.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">Ensemble Averaging</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">روش Ensemble Averaging و کاربرد آن</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_20.md"  target="_blank">slide_20.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">تحلیل عملکرد فیلترها</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">مقایسه SNR در فیلترهای مختلف</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_22-24.md"  target="_blank">slide_22-24.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">Moving Average</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">روش Moving Average و مقایسه با دیگر فیلترها</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_25-31.md"  target="_blank">slide_25-31.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">PCA و ICA</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">PCA، ICA و کاربرد آنها در جدا کردن منابع سیگنال</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 text-center"><a href="https://github.com/miladkhalafi/Signal-Processing/tree/main/Season_3/slide_33-40.md"  target="_blank">slide_33-40.md</a></td>
+          <td class="border border-gray-300 px-4 py-2 text-center">اسلاید</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">Independent Component Analysis</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">کاربرد ICA در پردازش سیگنال و حذف نویز</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
