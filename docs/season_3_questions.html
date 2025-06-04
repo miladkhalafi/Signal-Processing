@@ -25,9 +25,14 @@
       <li>Ensemble Averaging</li>
     </ul>
 
-    <table id="dataTable" class="w-full table-auto border-collapse shadow-md rounded-lg overflow-hidden mb-6">
-      <!-- توسط جاوااسکریپت پر می‌شود -->
-    </table>
+    <a href="https://github.com/miladkhalafi/Signal-Processing/blob/main/Season_3/question_1.md" target="_blank" class="inline-block mb-6 text-blue-600 hover:underline text-sm">
+      📘 راهنمای حل سؤال
+    </a>
+    <div class="overflow-x-auto">
+      <table id="dataTable" class="w-full table-auto border-collapse shadow-md rounded-lg overflow-hidden mb-6">
+        <!-- توسط جاوااسکریپت پر می‌شود -->
+      </table>
+    </div>
 
     <button onclick="generateNewData()" class="w-full md:w-auto px-6 py-3 text-lg font-medium bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white rounded-lg transition transform hover:-translate-y-1 shadow-md focus:outline-none mb-6">
       تغییر عددها
@@ -147,5 +152,125 @@ SNR = 10 * log10(${avgResult.signalEnergy.toFixed(2)} / ${avgResult.noiseEnergy.
     updateTable();
     calculateSNR();
   </script>
+
+  <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg mt-10 p-6 md:p-10">
+    <h1 class="text-2xl md:text-3xl text-gray-900 mb-5 pb-3 border-b border-gray-200">
+      سوال: فیلتر Moving Average و محاسبه SNR
+    </h1>
+
+    <p class="mb-4 text-gray-700">
+      یک سیگنال اصلی x[n] و نسخه نویزی آن x_noisy[n] داده شده است.
+      ابتدا مقدار SNR سیگنال نویزی را محاسبه کرده، سپس یک فیلتر Moving Average با مرتبه ۳ روی آن اعمال کنید و SNR جدید را به‌دست آورید.
+    </p>
+
+    <a href="https://github.com/miladkhalafi/Signal-Processing/blob/main/Season_3/question_2.md" target="_blank" class="inline-block mb-6 text-blue-600 hover:underline text-sm">
+      📘 راهنمای حل سؤال
+    </a>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">سیگنال اصلی (x[n]):</label>
+        <input id="x_original" type="text" value="2,4,6,8,6,4" class="w-full p-2 border rounded-lg shadow-sm" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">سیگنال نویزی (x_noisy[n]):</label>
+        <input id="x_noisy" type="text" value="2.3,4.5,5.6,8.3,5.5,3.7" class="w-full p-2 border rounded-lg shadow-sm" />
+      </div>
+    </div>
+
+    <button onclick="generateRandomAndProcess()" class="mt-6 w-full md:w-auto px-6 py-3 text-lg font-medium bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white rounded-lg transition transform hover:-translate-y-1 shadow-md focus:outline-none">
+      تغییر عددها
+    </button>
+
+    <div class="mt-10 p-6 bg-gray-100 border-l-4 border-green-500 rounded-lg">
+      <h2 class="text-xl text-blue-600 mb-4">نتیجه محاسبات:</h2>
+      <pre id="output" class="bg-gray-50 p-4 rounded-lg overflow-x-auto border border-gray-300 font-mono text-sm whitespace-pre-wrap shadow-inner"></pre>
+    </div>
+  </div>
+
+  <script>
+    function parseInput(str) {
+      return str.split(',').map(Number);
+    }
+
+    function energy(arr) {
+      return arr.reduce((sum, x) => sum + x ** 2, 0);
+    }
+
+    function log10(x) {
+      return Math.log(x) / Math.LN10;
+    }
+
+    function movingAverage3(x) {
+      const y = [];
+      for (let i = 0; i < x.length - 2; i++) {
+        y.push((x[i] + x[i + 1] + x[i + 2]) / 3);
+      }
+      return y;
+    }
+
+    function generateRandomSignal(length = 6) {
+      const base = [];
+      for (let i = 0; i < length; i++) {
+        base.push((Math.random() * 10).toFixed(1));
+      }
+      return base.map(Number);
+    }
+
+    function addNoise(signal, noiseLevel = 0.7) {
+      return signal.map(x => (x + (Math.random() * noiseLevel - noiseLevel / 2)).toFixed(2));
+    }
+
+    function generateRandomAndProcess() {
+      const x = generateRandomSignal();
+      const x_noisy = addNoise(x);
+
+      document.getElementById("x_original").value = x.join(',');
+      document.getElementById("x_noisy").value = x_noisy.join(',');
+
+      processSNR(); // Auto-process after generation
+    }
+
+    function processSNR() {
+      const x_orig = parseInput(document.getElementById("x_original").value);
+      const x_noisy = parseInput(document.getElementById("x_noisy").value);
+
+      if (x_orig.length !== x_noisy.length || x_orig.length < 3) {
+        document.getElementById("output").innerText = "خطا: طول سیگنال‌ها باید برابر و حداقل ۳ باشد.";
+        return;
+      }
+
+      const noise = x_noisy.map((x, i) => x - x_orig[i]);
+      const E_signal = energy(x_orig);
+      const E_noise = energy(noise);
+      const SNR_initial = 10 * log10(E_signal / E_noise);
+
+      const x_filtered = movingAverage3(x_noisy);
+      const x_orig_crop = x_orig.slice(0, x_filtered.length);
+      const error_after = x_filtered.map((y, i) => y - x_orig_crop[i]);
+      const E_noise_filtered = energy(error_after);
+      const E_signal_crop = energy(x_orig_crop);
+      const SNR_filtered = 10 * log10(E_signal_crop / E_noise_filtered);
+
+      const result = SNR_filtered > SNR_initial
+        ? "✅ بله، فیلتر باعث افزایش SNR شده است."
+        : "❌ خیر، فیلتر باعث کاهش SNR شده است.";
+
+      document.getElementById("output").innerText =
+  `🔸 انرژی سیگنال اصلی: ${E_signal.toFixed(2)}
+  🔸 انرژی نویز اولیه: ${E_noise.toFixed(2)}
+  🔸 SNR اولیه: ${SNR_initial.toFixed(2)} dB
+
+  🔹 سیگنال فیلترشده (MA3): [${x_filtered.map(x => Number(x).toFixed(2)).join(', ')}]
+  🔹 انرژی نویز پس از فیلتر: ${E_noise_filtered.toFixed(2)}
+  🔹 SNR پس از فیلتر: ${SNR_filtered.toFixed(2)} dB
+
+  ${result}`;
+    }
+
+    generateRandomAndProcess();
+  </script>
+
 </body>
 </html>
