@@ -5,27 +5,30 @@
 
 ### ✅ فرمول:
 
-$$
-\sigma = \sqrt{\sigma^2}, \quad s = \sqrt{s^2}
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Csigma%20%3D%20%5Csqrt%7B%5Csigma%5E2%7D%2C%20%5Cquad%20s%20%3D%20%5Csqrt%7Bs%5E2%7D>)
+
 
 ### 💡 ادامه مثال:
 
 از قبل داشتیم:
-- واریانس جامعه: $ \sigma^2 = 0.6667 $
-- واریانس نمونه: $ s^2 = 1 $
+- واریانس جامعه: ![Math](<https://latex.codecogs.com/svg.latex?%5Csigma%5E2%20%3D%200.6667>)
+- واریانس نمونه: ![Math](<https://latex.codecogs.com/svg.latex?s%5E2%20%3D%201>)
 
 پس:
 
 - انحراف معیار جامعه:  
-$$
-\sigma = \sqrt{0.6667} \approx 0.816
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Csigma%20%3D%20%5Csqrt%7B0.6667%7D%20%5Capprox%200.816>)
+
 
 - انحراف معیار نمونه:  
-$$
-s = \sqrt{1} = 1
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?s%20%3D%20%5Csqrt%7B1%7D%20%3D%201>)
+
 
 ✅ پس انحراف معیار:
 - جامعه: **0.816**
@@ -36,58 +39,66 @@ $$
 ## 🔹 بخش 5: **همبستگی (Correlation)**
 
 ### 📌 تعریف:
-همبستگی نشان‌دهنده شباهت خطی بین دو سیگنال است. عددی بین $-1$ تا $+1$.
+همبستگی نشان‌دهنده شباهت خطی بین دو سیگنال است. عددی بین ![Math](<https://latex.codecogs.com/svg.latex?-1>) تا ![Math](<https://latex.codecogs.com/svg.latex?%2B1>).
 
 ### ✅ فرمول:
 
-$$
-r_{xy} = \frac{\text{Cov}(x, y)}{\sigma_x \cdot \sigma_y}
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?r_%7Bxy%7D%20%3D%20%5Cfrac%7B%5Ctext%7BCov%7D%28x%2C%20y%29%7D%7B%5Csigma_x%20%5Ccdot%20%5Csigma_y%7D>)
+
 
 که:
-- $\text{Cov}(x, y)$: کواریانس بین دو سیگنال
-- $\sigma_x, \sigma_y$: انحراف معیار هر سیگنال
+- ![Math](<https://latex.codecogs.com/svg.latex?%5Ctext%7BCov%7D%28x%2C%20y%29>): کواریانس بین دو سیگنال
+- ![Math](<https://latex.codecogs.com/svg.latex?%5Csigma_x%2C%20%5Csigma_y>): انحراف معیار هر سیگنال
 
 ### 💡 مثال:
 
 فرض کنید دو سیگنال داریم:
 
-$$
-x = [1, 2, 3], \quad y = [2, 4, 6]
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?x%20%3D%20%5B1%2C%202%2C%203%5D%2C%20%5Cquad%20y%20%3D%20%5B2%2C%204%2C%206%5D>)
+
 
 میانگین‌ها:
-$$
-\bar{x} = 2, \quad \bar{y} = 4
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Cbar%7Bx%7D%20%3D%202%2C%20%5Cquad%20%5Cbar%7By%7D%20%3D%204>)
+
 
 تفاوت‌ها:
-$$
-(x - \bar{x}) = [-1, 0, 1], \quad (y - \bar{y}) = [-2, 0, 2]
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%28x%20-%20%5Cbar%7Bx%7D%29%20%3D%20%5B-1%2C%200%2C%201%5D%2C%20%5Cquad%20%28y%20-%20%5Cbar%7By%7D%29%20%3D%20%5B-2%2C%200%2C%202%5D>)
+
 
 ضرب تفاوت‌ها:
-$$
-(-1)(-2) = 2, \quad (0)(0) = 0, \quad (1)(2) = 2
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%28-1%29%28-2%29%20%3D%202%2C%20%5Cquad%20%280%29%280%29%20%3D%200%2C%20%5Cquad%20%281%29%282%29%20%3D%202>)
+
 
 جمع ضرب‌ها:
-$$
-\sum (x - \bar{x})(y - \bar{y}) = 2 + 0 + 2 = 4
-$$
 
-تقسیم بر $ N-1 = 2 $:
-$$
-\text{Cov}(x, y) = \frac{4}{2} = 2
-$$
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Csum%20%28x%20-%20%5Cbar%7Bx%7D%29%28y%20-%20%5Cbar%7By%7D%29%20%3D%202%20%2B%200%20%2B%202%20%3D%204>)
+
+
+تقسیم بر ![Math](<https://latex.codecogs.com/svg.latex?N-1%20%3D%202>):
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Ctext%7BCov%7D%28x%2C%20y%29%20%3D%20%5Cfrac%7B4%7D%7B2%7D%20%3D%202>)
+
 
 انحراف معیار:
-- $ \sigma_x = 1 $, $ \sigma_y = 2 $
+- ![Math](<https://latex.codecogs.com/svg.latex?%5Csigma_x%20%3D%201>), ![Math](<https://latex.codecogs.com/svg.latex?%5Csigma_y%20%3D%202>)
 
 همبستگی:
-$$
-r_{xy} = \frac{2}{1 \cdot 2} = 1
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?r_%7Bxy%7D%20%3D%20%5Cfrac%7B2%7D%7B1%20%5Ccdot%202%7D%20%3D%201>)
+
 
 ✅ بنابراین همبستگی بین x و y برابر **1** است (یعنی کاملاً مثبت)
 
@@ -110,61 +121,48 @@ $$
 
 فرض کنید داریم:
 
-$$
-X = \begin{bmatrix}
-1 & 2 \\
-3 & 4 \\
-5 & 6
-\end{bmatrix}
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?X%20%3D%20%5Cbegin%7Bbmatrix%7D%0A1%20%26%202%20%5C%5C%0A3%20%26%204%20%5C%5C%0A5%20%26%206%0A%5Cend%7Bbmatrix%7D>)
+
 
 #### ۱. میانگین ستون‌ها:
-$$
-\bar{x}_1 = \frac{1+3+5}{3} = 3, \quad \bar{x}_2 = \frac{2+4+6}{3} = 4
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Cbar%7Bx%7D_1%20%3D%20%5Cfrac%7B1%2B3%2B5%7D%7B3%7D%20%3D%203%2C%20%5Cquad%20%5Cbar%7Bx%7D_2%20%3D%20%5Cfrac%7B2%2B4%2B6%7D%7B3%7D%20%3D%204>)
+
 
 #### ۲. مرکز کردن:
-$$
-X_m = \begin{bmatrix}
-1-3 & 2-4 \\
-3-3 & 4-4 \\
-5-3 & 6-4
-\end{bmatrix} =
-\begin{bmatrix}
--2 & -2 \\
-0 & 0 \\
-2 & 2
-\end{bmatrix}
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?X_m%20%3D%20%5Cbegin%7Bbmatrix%7D%0A1-3%20%26%202-4%20%5C%5C%0A3-3%20%26%204-4%20%5C%5C%0A5-3%20%26%206-4%0A%5Cend%7Bbmatrix%7D%20%3D%0A%5Cbegin%7Bbmatrix%7D%0A-2%20%26%20-2%20%5C%5C%0A0%20%26%200%20%5C%5C%0A2%20%26%202%0A%5Cend%7Bbmatrix%7D>)
+
 
 #### ۳. ماتریس کواریانس:
-$$
-C = \frac{1}{N-1} X_m^T X_m = \frac{1}{2} \begin{bmatrix}
-8 & 8 \\
-8 & 8
-\end{bmatrix} =
-\begin{bmatrix}
-4 & 4 \\
-4 & 4
-\end{bmatrix}
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?C%20%3D%20%5Cfrac%7B1%7D%7BN-1%7D%20X_m%5ET%20X_m%20%3D%20%5Cfrac%7B1%7D%7B2%7D%20%5Cbegin%7Bbmatrix%7D%0A8%20%26%208%20%5C%5C%0A8%20%26%208%0A%5Cend%7Bbmatrix%7D%20%3D%0A%5Cbegin%7Bbmatrix%7D%0A4%20%26%204%20%5C%5C%0A4%20%26%204%0A%5Cend%7Bbmatrix%7D>)
+
 
 #### ۴. مقادیر ویژه:
 معادله مشخصه:
-$$
-\det(C - \lambda I) = 0 \Rightarrow (4-\lambda)^2 - 16 = 0 \Rightarrow \lambda_1 = 8, \; \lambda_2 = 0
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?%5Cdet%28C%20-%20%5Clambda%20I%29%20%3D%200%20%5CRightarrow%20%284-%5Clambda%29%5E2%20-%2016%20%3D%200%20%5CRightarrow%20%5Clambda_1%20%3D%208%2C%20%5C%3B%20%5Clambda_2%20%3D%200>)
+
 
 #### ۵. بردار ویژه:
-برای $ \lambda_1 = 8 $:
-$$
-v_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}
-$$
+برای ![Math](<https://latex.codecogs.com/svg.latex?%5Clambda_1%20%3D%208>):
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?v_1%20%3D%20%5Cbegin%7Bbmatrix%7D%201%20%5C%5C%201%20%5Cend%7Bbmatrix%7D>)
+
 
 #### ۶. تصحیح داده‌ها:
-$$
-Z = X_m \cdot v_1 = [-4, 0, 4]^T
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?Z%20%3D%20X_m%20%5Ccdot%20v_1%20%3D%20%5B-4%2C%200%2C%204%5D%5ET>)
+
 
 ✅ بنابراین PCA یک بعد از دو بعد کاست و فقط مؤلفه مهم را نگه داشت.
 
@@ -179,36 +177,40 @@ $$
 
 اگر داشته باشیم:
 
-$$
-x = A \cdot s
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?x%20%3D%20A%20%5Ccdot%20s>)
+
 
 که:
-- $ x $: سیگنال‌های آمیخته
-- $ A $: ماتریس اختلاط
-- $ s $: منابع اصلی (ناشناس)
+- ![Math](<https://latex.codecogs.com/svg.latex?x>): سیگنال‌های آمیخته
+- ![Math](<https://latex.codecogs.com/svg.latex?A>): ماتریس اختلاط
+- ![Math](<https://latex.codecogs.com/svg.latex?s>): منابع اصلی (ناشناس)
 
-هدف یافتن $ W = A^{-1} $ است تا بتوانیم:
+هدف یافتن ![Math](<https://latex.codecogs.com/svg.latex?W%20%3D%20A%5E%7B-1%7D>) است تا بتوانیم:
 
-$$
-s = W \cdot x
-$$
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?s%20%3D%20W%20%5Ccdot%20x>)
+
 
 ### 💡 مثال ساده:
 
 فرض کنید:
 
-$$
-x = \begin{bmatrix} 4 \\ 6 \\ 8 \end{bmatrix}, \quad A = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}
-$$
 
-می‌خواهیم $ s $ را پیدا کنیم:
 
-$$
-s = A^{-1} \cdot x
-$$
+![Math Formula](<https://latex.codecogs.com/svg.latex?x%20%3D%20%5Cbegin%7Bbmatrix%7D%204%20%5C%5C%206%20%5C%5C%208%20%5Cend%7Bbmatrix%7D%2C%20%5Cquad%20A%20%3D%20%5Cbegin%7Bbmatrix%7D%201%20%26%201%20%5C%5C%201%20%26%202%20%5C%5C%201%20%26%203%20%5Cend%7Bbmatrix%7D>)
 
-اما چون $ A $ مربع نیست، از روش‌های تقریبی مثل **روش کمترین مربعات** یا **ICA** استفاده می‌کنیم.
+
+می‌خواهیم ![Math](<https://latex.codecogs.com/svg.latex?s>) را پیدا کنیم:
+
+
+
+![Math Formula](<https://latex.codecogs.com/svg.latex?s%20%3D%20A%5E%7B-1%7D%20%5Ccdot%20x>)
+
+
+اما چون ![Math](<https://latex.codecogs.com/svg.latex?A>) مربع نیست، از روش‌های تقریبی مثل **روش کمترین مربعات** یا **ICA** استفاده می‌کنیم.
 
 ---
 
