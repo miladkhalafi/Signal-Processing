@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مثال تبدیل فوریه و محاسبه فرکانس</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: Tahoma, 'Nafees', sans-serif;
+            margin: 40px auto;
+            max-width: 900px;
+            line-height: 1.7;
+            background-color: #f9f9f9; 
+            color: #333;
+            direction: rtl;
+            text-align: justify;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-right: 20px;
+        }
+        p {
+            margin-bottom: 1em;
+        }
+        .math {
+            text-align: center;
+            margin: 1em 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>فصل چهارم - سیگنال‌های گسسته</h1>
+
+<p>در این فصل موضوع <strong>تبدیل فوریه (Fourier Transform)</strong> مورد بررسی قرار گرفته است. تبدیل فوریه یکی از مهم‌ترین ابزارهای آنالیز سیگنال‌هاست که به ما امکان می‌دهد نوسان‌های موجود در یک سیگنال را تحلیل کنیم.</p>
+
+<h2>توضیحات عمومی</h2>
+
+<ul>
+    <li><strong>تبدیل فوریه (Fourier Transform):</strong><br>
+        این تبدیل اطلاعات زمانی سیگنال را به اطلاعات فرکانسی تبدیل می‌کند.
+    </li>
+    <li><strong>فرکانس (Frequency):</strong><br>
+        تعداد سیکل‌های کامل یک سیگنال در واحد زمان (معمولاً ثانیه). واحد فرکانس هرتز (Hz) است.
+    </li>
+    <li><strong>پریود (Period):</strong><br>
+        زمان لازم برای اتمام یک سیکل کامل از سیگنال.
+    </li>
+    <li><strong>رابطه بین فرکانس و پریود:</strong><br>
+        <div class="math">
+        \[
+        f = \frac{1}{T}
+        \]
+        </div>
+        که در آن:
+        <ul>
+            <li>\( f \): فرکانس (بر حسب Hz)</li>
+            <li>\( T \): پریود (بر حسب ثانیه)</li>
+        </ul>
+    </li>
+</ul>
+
+<h2>مثال</h2>
+
+<h3>سوال:</h3>
+<p>یک سیگنال با چهار سیکل در ۰.۵ ثانیه وجود دارد. فرکانس این سیگنال چقدر است؟</p>
+
+<h3>پاسخ:</h3>
+<p>ابتدا پریود سیگنال را محاسبه می‌کنیم:</p>
+<div class="math">
+\[
+T = \frac{\text{زمان کل}}{\text{تعداد سیکل‌ها}} = \frac{0.5 \, \text{s}}{4} = 0.125 \, \text{s}
+\]
+</div>
+
+<p>سپس فرکانس را به دست می‌آوریم:</p>
+<div class="math">
+\[
+f = \frac{1}{T} = \frac{1}{0.125} = 8 \, \text{Hz}
+\]
+</div>
+
+<h3>نتیجه:</h3>
+<p>فرکانس سیگنال برابر است با:</p>
+<div class="math">
+\[
+\boxed{8 \, \text{Hz}}
+\]
+</div>
+
+<h2>نمودار سیگنال</h2>
+<p>در تصویر مربوطه، نمودار سیگنال به صورت زیر است:</p>
+<ul>
+    <li>محور افقی (\( t \)): زمان (ثانیه)</li>
+    <li>محور عمودی (\( y \)): مقدار سیگنال</li>
+    <li>سیگنال چهار سیکل در ۰.۵ ثانیه دارد.</li>
+</ul>
+
+<h2>خلاصه</h2>
+<ul>
+    <li>تبدیل فوریه ابزاری است برای تجزیه سیگنال‌های دوره‌ای به دامنه فرکانسی.</li>
+    <li>فرکانس (\( f \)) تعداد سیکل‌های کامل در یک ثانیه است.</li>
+    <li>پریود (\( T \)) زمان لازم برای اتمام یک سیکل کامل است.</li>
+    <li>رابطه بین فرکانس و پریود:
+        <div class="math">
+        \[
+        f = \frac{1}{T}
+        \]
+        </div>
+    </li>
+    <li>در این مثال، سیگنالی با چهار سیکل در ۰.۵ ثانیه داشتیم. بنابراین فرکانس آن برابر ۸ هرتز است.</li>
+</ul>
+
+<p><strong>پاسخ نهایی:</strong> <div class="math">\(\boxed{8 \, \text{Hz}}\)</div></p>
+
+</body>
+</html>
