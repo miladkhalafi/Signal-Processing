@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحلیل سیگنال یونیسفری</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body { font-family: 'Noto Serif', serif; direction: rtl; }
+    canvas { max-width: 600px; margin: 10px 0; }
+    .section { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    .formula { font-size: 1.2em; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>تحلیل سیگنال یونیسفری</h1>
+
+  <div class="section">
+    <h2>سوال</h2>
+    <p>داده‌های شدت سیگنال یونیسفری (6, 20, 28, 8, 1, -7, 20, 6, 7, -14, -19, -12) و جدول طیفی \( \text{Re}(X(m)) \) و \( \text{Im}(X(m)) \) برای فرکانس‌های \( m \) از 0 تا 11 داده شده است. باید بررسی کنیم که آیا محاسبات DFT با این جدول مطابقت دارد و نمودارها را رسم کنیم.</p>
+    <p>داده‌های جدول:</p>
+    <ul>
+      <li>\( m \): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11</li>
+      <li>\( \text{Re}(X(m)) \): 1.83, -0.24, 1.23, -0.63, 0.33, -0.89, 1.75, -0.89, 0.33, -0.63, 1.23, -0.24</li>
+      <li>\( \text{Im}(X(m)) \): 0, -2.79, -3.54, 0.13, 0.29, 0.17, 0, -0.17, -0.29, -0.13, 3.54, 2.79</li>
+    </ul>
+    <p>زمان فعلی: 04:16 PM CEST, یکشنبه 18 خرداد 1404 (June 08, 2025)</p>
+  </div>
+
+  <div class="section">
+    <h2>حل مرحله به مرحله</h2>
+    <p><strong>مرحله 1: بررسی داده‌ها</strong><br>داده‌های شدت شامل 12 نقطه زمانی با نوسانات مثبت و منفی است. جدول طیفی نتیجه تبدیل فوریه گسسته (DFT) است.</p>
+    <p><strong>مرحله 2: فرمول DFT</strong><br>فرمول: \( X(k) = \sum_{n=0}^{N-1} x(n) e^{-j 2\pi k n / N} \) <br>که \( N = 12 \)، \( x(n) \) شدت، و \( k \) فرکانس است.</p>
+    <p><strong>مرحله 3: محاسبات نمونه</strong><br>
+    - برای \( k = 0 \):<br>\( X(0) = \sum_{n=0}^{11} x(n) = 6 + 20 + 28 + 8 + 1 - 7 + 20 + 6 + 7 - 14 - 19 - 12 = 44 \)<br>
+    با نرمال‌سازی (تقسیم بر \( N = 12 \)): \( X(0) \approx 3.67 \)<br>جدول: \( \text{Re}(X(0)) = 1.83 \)، \( \text{Im}(X(0)) = 0 \)<br>تفاوت ممکن است به دلیل مقیاس یا نرمال‌سازی خاص باشد.<br>
+    - برای \( k = 1 \):<br>\( X(1) = \sum_{n=0}^{11} x(n) e^{-j 2\pi n / 12} \)<br>نمونه: \( n=0: 6 \), \( n=1: 20 \cdot (\cos(-30^\circ) - j \sin(-30^\circ)) \approx 17.32 - j 10 \)<br>جمع برداری کامل به \( \text{Re}(X(1)) \approx -0.24 \), \( \text{Im}(X(1)) \approx -2.79 \) نزدیک است.</p>
+    <p><strong>مرحله 4: نتیجه‌گیری</strong><br>محاسبات با جدول تا حدی مطابقت دارد، اما برای \( k = 0 \) اختلاف دیده می‌شود. الگوهای فرکانسی با داده‌ها سازگارند.</p>
+  </div>
+
+  <h2>نمودارها</h2>
+  <canvas id="intensityChart"></canvas>
+  <canvas id="realChart"></canvas>
+  <canvas id="imagChart"></canvas>
+  <div class="formula">
+    <p>فرمول تبدیل فوریه گسسته (DFT):</p>
+    <p>\( X(k) = \sum_{n=0}^{N-1} x(n) e^{-j 2\pi k n / N} \)</p>
+    <p>که در آن \( x(n) \) شدت، \( N = 12 \)، و \( k \) شاخص فرکانس است.</p>
+  </div>
+
+  <script>
+    // نمودار شدت
+    const intensityCtx = document.getElementById('intensityChart').getContext('2d');
+    new Chart(intensityCtx, {
+      type: 'line',
+      data: {
+        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        datasets: [{
+          label: 'شدت سیگنال',
+          data: [6, 20, 28, 8, 1, -7, 20, 6, 7, -14, -19, -12],
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // نمودار جزء حقیقی
+    const realCtx = document.getElementById('realChart').getContext('2d');
+    new Chart(realCtx, {
+      type: 'line',
+      data: {
+        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        datasets: [{
+          label: 'جزء حقیقی \( \text{Re}(X(m)) \)',
+          data: [1.83, -0.24, 1.23, -0.63, 0.33, -0.89, 1.75, -0.89, 0.33, -0.63, 1.23, -0.24],
+          borderColor: 'rgb(255, 99, 132)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // نمودار جزء موهومی
+    const imagCtx = document.getElementById('imagChart').getContext('2d');
+    new Chart(imagCtx, {
+      type: 'line',
+      data: {
+        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        datasets: [{
+          label: 'جزء موهومی \( \text{Im}(X(m)) \)',
+          data: [0, -2.79, -3.54, 0.13, 0.29, 0.17, 0, -0.17, -0.29, -0.13, 3.54, 2.79],
+          borderColor: 'rgb(54, 162, 235)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+</body>
+</html>

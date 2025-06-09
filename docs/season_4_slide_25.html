@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحلیل سیگنال با تبدیل فوریه</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+        .question {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .image-placeholder {
+            width: 100%;
+            background-color: #ddd;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+            color: #222222;
+        }
+        .math-equation {
+            margin: 10px 0;
+        }
+    </style>
+    <!-- بارگذاری MathJax برای رندر فرمول‌ها -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- بارگذاری نسخه به‌روز Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+</head>
+<body>
+    <h1>تحلیل سیگنال با تبدیل فوریه و تبدیل فوریه گسسته</h1>
+
+    <h2>مقدمه: تبدیل فوریه و تبدیل فوریه گسسته</h2>
+    <p>تبدیل فوریه (Fourier Transform) ابزاری ریاضی است که سیگنال‌ها را از دامنه زمان به دامنه فرکانس تبدیل می‌کند. این تبدیل به ما اجازه می‌دهد تا اجزای فرکانسی یک سیگنال را تحلیل کنیم. تبدیل فوریه گسسته (Discrete Fourier Transform - DFT) نسخه گسسته این تبدیل است که برای سیگنال‌های نمونه‌برداری‌شده (دیجیتال) استفاده می‌شود. رابطه اصلی DFT به صورت زیر است:</p>
+    <p class="math-equation">\(\displaystyle X(k) = \sum_{n=0}^{N-1} x(n) e^{-j 2\pi k n / N}\)</p>
+    <p>که در آن \( x(n) \) نمونه‌های سیگنال در زمان، \( X(k) \) طیف فرکانس، \( N \) تعداد نمونه‌ها، و \( k \) شاخص فرکانس است. فرکانس گسسته (\( F_d \)) با \( F_d = \frac{F_s}{N} \) محاسبه می‌شود، که \( F_s \) فرکانس نمونه‌برداری است.</p>
+
+    <div class="question">
+        <h3>سوال 1: محاسبه فرکانس سیگنال نوسانی چرخه‌ای</h3>
+        <p>در تصویر زیر، سیگنالی به صورت موج مثلثی در دامنه زمان نشان داده شده است. این سیگنال یک سیگنال نوسانی چرخه‌ای (oscillating, cyclic) است. فرکانس این سیگنال (بر حسب هرتز) چقدر است؟ فرض کنید زمان کل نشان‌داده‌شده در محور افقی 0.5 ثانیه باشد و تعداد چرخه‌ها بر اساس شکل مشخص شود.</p>
+        <div class="image-placeholder">تصویر موج مثلثی (مثال اول)</div>
+        <div id="plot1" style="width: 100%; height: 300px;"></div>
+<script>
+    var trace1 = {
+        x: Array.from({length: 17}, (_, i) => i * 0.03125),
+        y: [0, 1, 0, -1, 0, 1, 0, -1, 0, 1, 0, -1, 0, 1, 0, -1, 0],
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: 'سیگنال مثلثی'
+    };
+
+    var layout = {
+        title: 'نمودار سیگنال مثلثی در دامنه زمان',
+        xaxis: {
+            title: 'زمان (ثانیه)',
+            showgrid: true,
+            gridwidth: 1,
+            gridcolor: 'rgba(0,0,0,0.1)'
+        },
+        yaxis: {
+            title: 'دامنه',
+            showgrid: true,
+            gridwidth: 1,
+            gridcolor: 'rgba(0,0,0,0.1)'
+        },
+        hovermode: 'closest',
+        showlegend: true,
+        legend: {
+            x: 0.85,
+            y: 0.95
+        }
+    };
+
+    Plotly.newPlot('plot1', [trace1], layout);
+</script>
+        <p><strong>پاسخ:</strong> دوره زمانی (T) سیگنال 0.125 ثانیه است (چون 4 چرخه در 0.5 ثانیه وجود دارد، بنابراین \( T = 0.5 / 4 = 0.125 \, \text{s} \)). فرکانس (\( f \)) از رابطه \( f = 1/T \) محاسبه می‌شود: \( f = \frac{1}{0.125} = 8 \, \text{Hz} \).</p>
+        <p><strong>توضیح:</strong> فرکانس 8 هرتز نشان می‌دهد که سیگنال در هر ثانیه 8 چرخه کامل دارد.</p>
+    </div>
+
+    <div class="question">
+        <h3>سوال 2: محاسبه فرکانس گسسته در تبدیل فوریه گسسته (DFT)</h3>
+        <p>در تصویر زیر، توضیحاتی درباره تبدیل فوریه گسسته (Discrete Fourier Transform - DFT) ارائه شده است. اگر تعداد نمونه‌ها (\( N \)) برابر 10 باشد و فرکانس نمونه‌برداری (\( F_s \)) برابر 8 هرتز (بر اساس مثال اول) فرض شود، فرکانس گسسته (\( F_d \)) را محاسبه کنید. رابطه \( F_d = \frac{F_s}{N} \) یا \( F_d = \frac{1}{N \cdot T} \) را به کار ببرید.</p>
+        <div class="image-placeholder">تصویر توضیحات DFT (مثال دوم)</div>
+        <div id="plot2" style="width: 100%; height: 300px;"></div>
+<script>
+    var x2 = Array.from({length: 10}, (_, i) => i * 0.1);
+    var y2 = x2.map(x => Math.sin(2 * Math.PI * 8 * x));
+    var trace2 = {
+        x: x2,
+        y: y2,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'سیگنال سینوسی'
+    };
+
+    var layout2 = {
+        title: 'نمودار سیگنال سینوسی با فرکانس 8 هرتز',
+        xaxis: {
+            title: 'زمان (ثانیه)',
+            showgrid: true
+        },
+        yaxis: {
+            title: 'دامنه',
+            showgrid: true
+        },
+        hovermode: 'x unified',
+        showlegend: true
+    };
+
+    Plotly.newPlot('plot2', [trace2], layout2);
+</script>
+        <p><strong>پاسخ:</strong> با جایگذاری \( F_s = 8 \, \text{Hz} \) و \( N = 10 \): \( F_d = \frac{F_s}{N} = \frac{8}{10} = 0.8 \, \text{Hz} \).</p>
+        <p><strong>توضیح:</strong> فرکانس گسسته فاصله بین فرکانس‌های گسسته در حوزه فرکانس را نشان می‌دهد.</p>
+    </div>
+
+    <div class="question">
+        <h3>سوال 3: تحلیل دامنه زمان و فرکانس</h3>
+        <p>در تصویر زیر، نمودارهای دامنه زمان (Time domain) و دامنه فرکانس (Frequency domain) یک سیگنال نشان داده شده است. تعداد نمونه‌ها در دامنه زمان (\( N \)) و دامنه فرکانس (\( M \)) را مشخص کنید. همچنین، فرکانس گسسته (\( F_d \)) را با فرض \( F_s \) (فرکانس نمونه‌برداری) برابر 12 هرتز محاسبه کنید. خط تقارن در دامنه فرکانس را توضیح دهید.</p>
+        <div class="image-placeholder">تصویر نمودار زمان و فرکانس (مثال سوم)</div>
+        <div id="plot3" style="width: 100%; height: 300px;"></div>
+<script>
+    var x3 = Array.from({length: 12}, (_, i) => i * (0.5 / 12));
+    var y3 = x3.map(x => Math.sin(2 * Math.PI * 8 * x));
+    var trace3 = {
+        x: x3,
+        y: y3,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'سیگنال سینوسی'
+    };
+
+    var layout3 = {
+        title: 'سیگنال در دامنه زمان با N=12 نمونه',
+        xaxis: { title: 'زمان (ثانیه)' },
+        yaxis: { title: 'دامنه' },
+        showlegend: true
+    };
+
+    Plotly.newPlot('plot3', [trace3], layout3);
+</script>
+        <p><strong>پاسخ:</strong> تعداد نمونه‌ها در دامنه زمان: \( N = 12 \). تعداد نقاط در دامنه فرکانس: \( M = 12 \). فرکانس گسسته: \( F_d = \frac{F_s}{N} = \frac{12}{12} = 1 \, \text{Hz} \).</p>
+        <p><strong>توضیح خط تقارن:</strong> خط تقارن در \( F_s / 2 = 6 \, \text{Hz} \) قرار دارد، که به دلیل ویژگی تقارن طیف در تبدیل فوریه گسسته است.</p>
+    </div>
+
+    <div class="question">
+        <h3>سوال 4: تحلیل طیف فرکانس با فرکانس نمونه‌برداری مشخص</h3>
+        <p>در تصویر زیر، دامنه فرکانس یک سیگنال با فرکانس نمونه‌برداری (\( F_s \)) برابر 6 هرتز نشان داده شده است. تعداد نقاط فرکانسی (\( M \)) و مقادیر طیفی (spectral magnitude) برای \( m = 0 \) تا \( m = 6 \) را مشخص کنید. فرکانس گسسته (\( F_d \)) را محاسبه کنید.</p>
+        <div class="image-placeholder">تصویر نمودار فرکانس (مثال چهارم)</div>
+        <div id="plot4" style="width: 100%; height: 300px;"></div>
+<script>
+    var x4 = Array.from({length: 12}, (_, i) => i * (0.5 / 12));
+    var y4 = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3, 2.5, 2, 1.5, 1];
+    var trace4 = {
+        x: x4,
+        y: y4,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'طیف فرکانس'
+    };
+
+    var layout4 = {
+        title: 'نمودار طیف فرکانس با Fs=6 Hz',
+        xaxis: { title: 'فرکانس (هرتز)' },
+        yaxis: { title: 'دامنه طیفی' },
+        shapes: [{
+            type: 'line',
+            x0: 3,
+            y0: 0,
+            x1: 3,
+            y1: 3,
+            line: { color: 'red', width: 2, dash: 'dot' },
+            name: 'نیمیه نایکوئیست'
+        }],
+        annotations: [{
+            x: 3,
+            y: 3,
+            text: 'Fs/2 = 3 Hz',
+            showarrow: true,
+            arrowhead: 2
+        }]
+    };
+
+    Plotly.newPlot('plot4', [trace4], layout4);
+</script>
+        <p><strong>پاسخ:</strong> تعداد نقاط فرکانسی: \( M = 12 \). مقادیر طیفی: \( m = 0: 0 \), \( m = 1: 0.5 \), \( m = 2: 1 \), \( m = 3: 1.5 \), \( m = 4: 2 \), \( m = 5: 2.5 \), \( m = 6: 3 \). فرکانس گسسته: \( F_d = \frac{F_s}{N} = \frac{6}{12} = 0.5 \, \text{Hz} \).</p>
+        <p><strong>توضیح:</strong> مقادیر طیفی نشان‌دهنده دامنه اجزای فرکانسی سیگنال هستند و خط تقارن در \( F_s / 2 = 3 \, \text{Hz} \) قرار دارد.</p>
+    </div>
+</body>
+</html>
